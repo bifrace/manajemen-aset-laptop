@@ -7,17 +7,31 @@ export default function AsetPage() {
 
   const getData = async () => {
     const res = await fetch("/api/aset");
-    setData(await res.json());
+    const json = await res.json();
+    setData(json);
   };
 
   const submitData = async () => {
-    const method = form.id ? "PUT" : "POST";
-
-    await fetch("/api/aset", {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    if (form.id) {
+      // UPDATE ke /api/aset/{id}
+      await fetch(`/api/aset/${form.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nama: form.nama,
+          deskripsi: form.deskripsi,
+          lokasi: form.lokasi,
+          status: form.status,
+        }),
+      });
+    } else {
+      // CREATE ke /api/aset
+      await fetch("/api/aset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    }
 
     setForm({ id: null, nama: "", deskripsi: "", lokasi: "", status: "" });
     getData();
@@ -34,10 +48,8 @@ export default function AsetPage() {
   };
 
   const handleDelete = async (id) => {
-    await fetch("/api/aset", {
+    await fetch(`/api/aset/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
     });
     getData();
   };
@@ -52,11 +64,34 @@ export default function AsetPage() {
 
       {/* FORM INPUT */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <input className="border p-2" placeholder="Nama" value={form.nama} onChange={(e) => setForm({ ...form, nama: e.target.value })} />
-        <input className="border p-2" placeholder="Deskripsi" value={form.deskripsi} onChange={(e) => setForm({ ...form, deskripsi: e.target.value })} />
-        <input className="border p-2" placeholder="Lokasi" value={form.lokasi} onChange={(e) => setForm({ ...form, lokasi: e.target.value })} />
-        <input className="border p-2" placeholder="Status" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} />
-        <button onClick={submitData} className="col-span-2 bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition">
+        <input
+          className="border p-2"
+          placeholder="Nama"
+          value={form.nama}
+          onChange={(e) => setForm({ ...form, nama: e.target.value })}
+        />
+        <input
+          className="border p-2"
+          placeholder="Deskripsi"
+          value={form.deskripsi}
+          onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
+        />
+        <input
+          className="border p-2"
+          placeholder="Lokasi"
+          value={form.lokasi}
+          onChange={(e) => setForm({ ...form, lokasi: e.target.value })}
+        />
+        <input
+          className="border p-2"
+          placeholder="Status"
+          value={form.status}
+          onChange={(e) => setForm({ ...form, status: e.target.value })}
+        />
+        <button
+          onClick={submitData}
+          className="col-span-2 bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition"
+        >
           {form.id ? "Update Aset" : "Tambah Aset"}
         </button>
       </div>
@@ -81,14 +116,26 @@ export default function AsetPage() {
                 <td className="p-2">{item.lokasi}</td>
                 <td className="p-2">{item.status}</td>
                 <td className="p-2 flex gap-2">
-                  <button onClick={() => handleEdit(item)} className="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Hapus</button>
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Hapus
+                  </button>
                 </td>
               </tr>
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">Belum ada data aset.</td>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Belum ada data aset.
+                </td>
               </tr>
             )}
           </tbody>
