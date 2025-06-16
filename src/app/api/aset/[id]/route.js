@@ -1,13 +1,13 @@
-// src/app/api/aset/[id]/route.js
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
-export async function PUT(req, { params }) {
+export async function PUT(req, context) {
   try {
     const body = await req.json();
-    const id = parseInt(params.id, 10);
+    const { id } = await context.params; // ⛏ fix: await context.params
+
     const updated = await prisma.aset.update({
-      where: { id },
+      where: { id: parseInt(id, 10) },
       data: {
         nama: body.nama,
         deskripsi: body.deskripsi,
@@ -15,18 +15,25 @@ export async function PUT(req, { params }) {
         status: body.status,
       },
     });
+
     return NextResponse.json(updated);
-  } catch {
+  } catch (error) {
+    console.error("Gagal update aset:", error);
     return new Response("Internal Server Error", { status: 500 });
   }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
   try {
-    const id = parseInt(params.id, 10);
-    await prisma.aset.delete({ where: { id } });
+    const { id } = await context.params; // ⛏ fix: await context.params
+
+    await prisma.aset.delete({
+      where: { id: parseInt(id, 10) },
+    });
+
     return NextResponse.json({ message: "Aset dihapus" });
-  } catch {
+  } catch (error) {
+    console.error("Gagal hapus aset:", error);
     return new Response("Internal Server Error", { status: 500 });
   }
 }
