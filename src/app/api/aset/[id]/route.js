@@ -1,39 +1,28 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/app/lib/prisma";
+import prisma from "@/generated/prisma";
 
-export async function PUT(req, context) {
-  try {
-    const body = await req.json();
-    const { id } = await context.params; // ⛏ fix: await context.params
-
-    const updated = await prisma.aset.update({
-      where: { id: parseInt(id, 10) },
-      data: {
-        nama: body.nama,
-        deskripsi: body.deskripsi,
-        lokasi: body.lokasi,
-        status: body.status,
-      },
-    });
-
-    return NextResponse.json(updated);
-  } catch (error) {
-    console.error("Gagal update aset:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
+export async function PUT(req, { params }) {
+  const body = await req.json();
+  const id = parseInt(params.id);
+  const aset = await prisma.aset.update({
+    where: { id },
+    data: {
+      nama: body.nama,
+      merek: body.merek,
+      serial: body.serial,
+      kondisi: body.kondisi,
+      status: body.status,
+    },
+  });
+  return NextResponse.json(aset);
 }
 
-export async function DELETE(req, context) {
+export async function DELETE(req, { params }) {
+  const id = parseInt(params.id);
   try {
-    const { id } = await context.params; // ⛏ fix: await context.params
-
-    await prisma.aset.delete({
-      where: { id: parseInt(id, 10) },
-    });
-
+    await prisma.aset.delete({ where: { id } });
     return NextResponse.json({ message: "Aset dihapus" });
   } catch (error) {
-    console.error("Gagal hapus aset:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    return NextResponse.json({ error: "Gagal hapus aset" }, { status: 400 });
   }
 }

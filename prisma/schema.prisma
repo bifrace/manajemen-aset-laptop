@@ -15,10 +15,39 @@ datasource db {
 }
 
 model Aset {
-  id          Int      @id @default(autoincrement())
-  nama        String
-  deskripsi   String?
-  lokasi      String
-  status      String
-  tanggal     DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  nama      String
+  merek     String   @default("") // ⬅ tambahkan default
+  serial    String   @unique @default("") // ⬅ tambahkan default
+  kondisi   String   @default("") // ⬅ tambahkan default
+  status    String
+  transaksi Transaksi[]
+}
+
+model Penyewa {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  kontak    String
+  identitas String
+  transaksi Transaksi[]
+}
+
+model Transaksi {
+  id             Int       @id @default(autoincrement())
+  asetId         Int
+  aset           Aset      @relation(fields: [asetId], references: [id])
+  penyewaId      Int
+  penyewa        Penyewa   @relation(fields: [penyewaId], references: [id])
+  tanggalPinjam  DateTime
+  tanggalKembali DateTime?
+  status         String    // disewa, selesai
+
+  @@index([asetId])
+  @@index([penyewaId])
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String // disimpan dalam bentuk hash
 }

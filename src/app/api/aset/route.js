@@ -1,26 +1,16 @@
-// src/app/api/aset/route.js
-import { NextResponse } from "next/server";
-import { prisma } from "@/app/lib/prisma";
+import { PrismaClient } from '@/generated/prisma/client';
+import { NextResponse } from 'next/server';
+
+const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const data = await prisma.aset.findMany();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error("Gagal mengambil aset:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
-}
-
-export async function POST(req) {
-  try {
-    const { nama, deskripsi, lokasi, status } = await req.json();
-    const created = await prisma.aset.create({
-      data: { nama, deskripsi, lokasi, status }
+    const aset = await prisma.aset.findMany({
+      include: { transaksi: true }
     });
-    return NextResponse.json(created);
+    return NextResponse.json(aset);
   } catch (error) {
-    console.error("Gagal menambahkan aset:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: 'Gagal mengambil data aset' }, { status: 500 });
   }
 }
