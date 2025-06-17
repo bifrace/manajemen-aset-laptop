@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 
 export default function AsetPage() {
   const [data, setData] = useState([]);
-  const [form, setForm] = useState({ id: null, nama: "", deskripsi: "", lokasi: "", status: "" });
+  const [form, setForm] = useState({
+    id: null,
+    merek: "",
+    serial: "",
+    kondisi: "",
+    status: "",
+  });
 
   const getData = async () => {
     const res = await fetch("/api/aset");
@@ -12,37 +18,37 @@ export default function AsetPage() {
   };
 
   const submitData = async () => {
+    const payload = {
+      merek: form.merek,
+      serial: form.serial,
+      kondisi: form.kondisi,
+      status: form.status,
+    };
+
     if (form.id) {
-      // UPDATE ke /api/aset/{id}
       await fetch(`/api/aset/${form.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nama: form.nama,
-          deskripsi: form.deskripsi,
-          lokasi: form.lokasi,
-          status: form.status,
-        }),
+        body: JSON.stringify(payload),
       });
     } else {
-      // CREATE ke /api/aset
       await fetch("/api/aset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
     }
 
-    setForm({ id: null, nama: "", deskripsi: "", lokasi: "", status: "" });
+    setForm({ id: null, merek: "", serial: "", kondisi: "", status: "" });
     getData();
   };
 
   const handleEdit = (item) => {
     setForm({
       id: item.id,
-      nama: item.nama,
-      deskripsi: item.deskripsi,
-      lokasi: item.lokasi,
+      merek: item.merek,
+      serial: item.serial,
+      kondisi: item.kondisi,
       status: item.status,
     });
   };
@@ -62,29 +68,28 @@ export default function AsetPage() {
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Manajemen Aset Laptop</h1>
 
-      {/* FORM INPUT */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <input
           className="border p-2"
-          placeholder="Nama"
-          value={form.nama}
-          onChange={(e) => setForm({ ...form, nama: e.target.value })}
+          placeholder="Merek Laptop"
+          value={form.merek}
+          onChange={(e) => setForm({ ...form, merek: e.target.value })}
         />
         <input
           className="border p-2"
-          placeholder="Deskripsi"
-          value={form.deskripsi}
-          onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
+          placeholder="Serial Number"
+          value={form.serial}
+          onChange={(e) => setForm({ ...form, serial: e.target.value })}
         />
         <input
           className="border p-2"
-          placeholder="Lokasi"
-          value={form.lokasi}
-          onChange={(e) => setForm({ ...form, lokasi: e.target.value })}
+          placeholder="Kondisi (baik/rusak)"
+          value={form.kondisi}
+          onChange={(e) => setForm({ ...form, kondisi: e.target.value })}
         />
         <input
           className="border p-2"
-          placeholder="Status"
+          placeholder="Status (tersedia/disewa/rusak)"
           value={form.status}
           onChange={(e) => setForm({ ...form, status: e.target.value })}
         />
@@ -96,14 +101,13 @@ export default function AsetPage() {
         </button>
       </div>
 
-      {/* TABEL INTERAKTIF */}
       <div className="overflow-x-auto">
         <table className="min-w-full border text-sm text-left shadow">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="p-2">Nama</th>
-              <th className="p-2">Deskripsi</th>
-              <th className="p-2">Lokasi</th>
+              <th className="p-2">Merek</th>
+              <th className="p-2">Serial</th>
+              <th className="p-2">Kondisi</th>
               <th className="p-2">Status</th>
               <th className="p-2">Aksi</th>
             </tr>
@@ -111,9 +115,9 @@ export default function AsetPage() {
           <tbody>
             {data.map((item) => (
               <tr key={item.id} className="border-b hover:bg-gray-100">
-                <td className="p-2">{item.nama}</td>
-                <td className="p-2">{item.deskripsi}</td>
-                <td className="p-2">{item.lokasi}</td>
+                <td className="p-2">{item.merek}</td>
+                <td className="p-2">{item.serial}</td>
+                <td className="p-2">{item.kondisi}</td>
                 <td className="p-2">{item.status}</td>
                 <td className="p-2 flex gap-2">
                   <button

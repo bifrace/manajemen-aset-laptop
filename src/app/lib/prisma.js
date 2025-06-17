@@ -1,4 +1,5 @@
-import { PrismaClient } from "@/generated/prisma"; // custom path sesuai `output`
+import { PrismaClient } from '../../generated/prisma';
+
 
 const globalForPrisma = global;
 

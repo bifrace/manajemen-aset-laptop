@@ -44,7 +44,7 @@ export default function DashboardAdmin() {
           <tbody>
             {logTerbaru.map((t) => (
               <tr key={t.id} className="border-b">
-                <td className="p-2">{t.aset.nama}</td>
+                <td className="p-2">{t.aset.merek}</td>
                 <td className="p-2">{t.penyewa.nama}</td>
                 <td className="p-2">{new Date(t.tanggalPinjam).toLocaleDateString()}</td>
                 <td className="p-2">{t.tanggalKembali ? new Date(t.tanggalKembali).toLocaleDateString() : "-"}</td>

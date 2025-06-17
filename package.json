@@ -2,14 +2,18 @@
   "name": "manajemen-aset-laptop",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
+  
   "dependencies": {
     "@prisma/client": "^6.9.0",
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.1",
     "next": "15.3.3",
     "react": "^19.0.0",

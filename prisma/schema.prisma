@@ -16,7 +16,6 @@ datasource db {
 
 model Aset {
   id        Int      @id @default(autoincrement())
-  nama      String
   merek     String   @default("") // ⬅ tambahkan default
   serial    String   @unique @default("") // ⬅ tambahkan default
   kondisi   String   @default("") // ⬅ tambahkan default
