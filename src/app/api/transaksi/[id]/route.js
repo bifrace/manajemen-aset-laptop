@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "@/generated/prisma";
+import { prisma } from "@/app/lib/prisma";
+
+
 
 // Update transaksi saat pengembalian (status: selesai)
 export async function PUT(req, { params }) {
@@ -31,7 +33,7 @@ export async function DELETE(req, { params }) {
   const id = parseInt(params.id);
   try {
     await prisma.transaksi.delete({ where: { id } });
-    return NextResponse.json({ message: "Transaksi dihapus" });
+    return NextResponse.json({ message: "transaksi dihapus" });
   } catch (error) {
     return NextResponse.json({ error: "Gagal hapus transaksi" }, { status: 400 });
   }

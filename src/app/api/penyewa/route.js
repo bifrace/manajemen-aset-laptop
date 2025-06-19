@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "@/generated/prisma";
+import { prisma } from "@/app/lib/prisma";
+
 
 export async function GET() {
   const data = await prisma.penyewa.findMany({
