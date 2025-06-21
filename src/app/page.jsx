@@ -40,26 +40,63 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-black to-zinc-800 text-white pt-20">
       <Navbar role="admin" />
 
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">📊 Dashboard Statistik</h1>
+      <div className="p-6 max-w-7xl mx-auto">
+        <h1 className="text-3xl font-extrabold mb-6 tracking-tight">📊 Dashboard Statistik</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-blue-500 text-white"><CardContent className="p-4">Total Aset<br />{totalAset}</CardContent></Card>
-          <Card className="bg-green-500 text-white"><CardContent className="p-4">Tersedia<br />{asetTersedia}</CardContent></Card>
-          <Card className="bg-yellow-400 text-black"><CardContent className="p-4">Disewa<br />{asetDisewa}</CardContent></Card>
-          <Card className="bg-red-500 text-white"><CardContent className="p-4">Rusak<br />{asetRusak}</CardContent></Card>
-          <Card className="bg-purple-500 text-white"><CardContent className="p-4">Total Penyewa<br />{totalPenyewa}</CardContent></Card>
-          <Card className="bg-orange-500 text-white"><CardContent className="p-4">Aktif<br />{transaksiAktif}</CardContent></Card>
-          <Card className="bg-slate-600 text-white"><CardContent className="p-4">Selesai<br />{transaksiSelesai}</CardContent></Card>
+        {/* GRID Statistik */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <Card className="bg-blue-600 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Total Aset</h2>
+              <p className="text-3xl font-bold">{totalAset}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-green-500 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Tersedia</h2>
+              <p className="text-3xl font-bold">{asetTersedia}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-yellow-400 text-black hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Disewa</h2>
+              <p className="text-3xl font-bold">{asetDisewa}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-red-500 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Rusak</h2>
+              <p className="text-3xl font-bold">{asetRusak}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-purple-500 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Total Penyewa</h2>
+              <p className="text-3xl font-bold">{totalPenyewa}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-orange-500 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Aktif</h2>
+              <p className="text-3xl font-bold">{transaksiAktif}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-600 hover:scale-105 transition-transform duration-200">
+            <CardContent className="p-5">
+              <h2 className="text-lg font-semibold">Selesai</h2>
+              <p className="text-3xl font-bold">{transaksiSelesai}</p>
+            </CardContent>
+          </Card>
         </div>
 
-        <Card className="mb-6">
-          <CardContent className="p-4">
-            <h2 className="text-lg font-semibold mb-2">📈 Grafik Aset & Transaksi</h2>
-            <ResponsiveContainer width="100%" height={250}>
+        {/* Grafik */}
+        <Card className="bg-neutral-900 border border-neutral-700 mb-10">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">📈 Grafik Aset & Transaksi</h2>
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" stroke="#ccc" />
                 <YAxis stroke="#ccc" />
@@ -70,23 +107,26 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <h2 className="text-lg font-semibold mb-4">🕒 Log Transaksi Terbaru</h2>
+        {/* Log Transaksi */}
+        <Card className="bg-neutral-900 border border-neutral-700">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-4">🕒 Log Transaksi Terbaru</h2>
             <div className="overflow-x-auto">
-              <table className="table-auto w-full border border-gray-700">
+              <table className="table-auto w-full border border-gray-700 text-sm">
                 <thead>
                   <tr className="bg-gray-800 text-white">
-                    <th className="p-2">Penyewa</th>
-                    <th className="p-2">Aset</th>
-                    <th className="p-2">Tanggal Pinjam</th>
-                    <th className="p-2">Status</th>
+                    <th className="p-3 text-left">Penyewa</th>
+                    <th className="p-3 text-left">Aset</th>
+                    <th className="p-3 text-left">Tanggal Pinjam</th>
+                    <th className="p-3 text-left">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {logTerbaru.length === 0 ? (
                     <tr>
-                      <td colSpan="4" className="text-center p-4 text-gray-400">Tidak ada transaksi baru.</td>
+                      <td colSpan="4" className="text-center p-4 text-gray-400">
+                        Tidak ada transaksi baru.
+                      </td>
                     </tr>
                   ) : (
                     logTerbaru.map((trx, i) => (
